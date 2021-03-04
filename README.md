@@ -3,28 +3,103 @@ This repository contains the files necessary to create a Node-RED flow that will
 
 ## Who is this tutorial for?
 
-This overview is intended for Compass Administrators who will assist their organization in providing easy access to Compass data for use in 3rd party software products.
+This overview is intended for Compass Administrators who will assist their organization in providing easy access to Compass data for use in 3rd party software products.  The administrator will be responsible for setting up a Node-RED server and verifying the connection to Compass.
 
-## Usage
+## Architectural Overview
 
-Following these directions will result . . . . .
+Need help here showing the relationship between Node-RED, Compass, and 3rd party software products.
 
-## Getting Started
+## Pre-requisites
+	Compass 2.0.1 + running with the API server
+	(localhost:8190)
+	At least 1 valid DB/Schema
+	1 query used for creating a dashboard called Dashboard Data
+	(I used the defect schema and the All Defects query, modified by adding Severity, Owner, and Priority fields)
+	
+## Install Node-RED
+	Follow the directions at: https://nodered.org/#get-started
+	localhost:1880
+	
+## Download the Compass-Custom-Nodes zip file
+	- Unzip The contents in a data directory <c:\compassdata>
+	- c:\compassdata\compass-custom-nodes-master\ contains the documentation, the packaged node, and the flows necessary for configuration.  
+	- c:\compassdata\compass-custom-nodes-master\compass-query contains the source files for packaging the node using npm pack
+		
+## Configure Node-RED for use
+	- Install CSV to JSON node
+		Select the Node-RED hamburger icon
+		Select Manage Palette
+		Select the Install Tab
+		Search on CSV
+		Select Install for the node-red-contrib-csvtojson
+	- To verify
+		In your palette, search on csv
+	- Install Compass Query  
+		This node will be published when it is approved.  These are the temporary directions:
+		Find the directory that contains the node-red.cmd file and open a cmd prompt in that location
+		>npm install -g d:\compassdata\compass-custom-nodes-master\compass-query-1.0.0.tgz
+			This was created by:
+			d:\compassdata\compass-custom-nodes-master\compass-query>npm pack
+	- To verify the Compass Query node was installed correctly
+		In your palette, search on compass
+	- Import the Flows:
+		In the c:\compassdata\compass-custom-nodes-master directory:
+			CompassIntegrationFlows.json (Contains both flows, you only need to import this one)
+			CompassPowerBI-flow.json
+			CompassTableau-flow.json
+		Select the Node-RED hamburger icon in the upper-right corner
+		Select Import then Clipboard
+		Select file to import
+		Select the CompassIntegrationFlows.json file (2 flows and 13 nodes should be imported)
+		Double-click the Compass Query node
+			Enter the following information for your Compass install:
+			host: <localhost>
+			port: <8190>
+			Username: <admin>
+			Password: <>
+			Application: <from dropdown 2.0.0-SAMPL>
+			Query: <Dashboard Data>
+		Select Done
+		Deploy the changes by selecting the Node-RED Deploy button.
 
-These instructions will get you a copy of the Xcode project on your Mac for development and testing purposes.
+To Verify that everything is setup correctly, you should be able to open a browser: localhost:1881\compassData.  This will return data in the form of json from your query.
 
-### Prerequisites
+At this point, you are ready to begin testing with Microsoft Power BI
 
-Xcode needs to be downloaded from the App Store. It is recommended to use Xcode 11 or later, and macOS 10.14.4 or later.
-Compass needs to be installed and the Compass server needs to be running somewhere.
+## Execute Query Example 1 
+	The Compass Query Node can be configured with a username/password, repo/db, and query.  Each of these can be sent on the URL request as parameters:
+		host=localhost
+		port=1880
+		username=admin
+		password=
+		queryPath=Personal Queries/Dashboard Data (make sure to replace spaces with %20)
+		repo=2.0.0
+		db=SAMPL
+	http://localhost:1880/compassData?username=admin&password=&queryPath=Personal%20queries/Dashboard%20Data&repo=2.0.0&db=SAMPL
+
+## Execute Query Example 2
+	
+		host=localhost
+		port=1880
+		username=admin
+		password=
+		queryPath=Personal Queries/All Stories (make sure to replace spaces with %20)
+		repo=2.0.0
+		db=safe
+	http://localhost:1880/compassData?username=admin&password=&queryPath=Personal%20queries/All%20Stories&repo=2.0.0&db=safe
 
 
-## Build the App
-
-To build the app in Xcode, click on Product in the menu bar and then click on Clean Build Folder.
-To run the app in Xcode, click on Product in the menu bar and then click on Run.
-To build and then run the app, click on the play icon in the top left corner.
-
+## Sub Folders
+	When configuring the Compass Query node, only the queries that exist either in the Personal Queries or Public Queries folders will be displayd in the drop down list.  If you need to access a query that is in a subfolder, you will need to use the queryPath parameter as in the following example:
+		host=localhost
+		port=1880
+		username=admin
+		password=
+		queryPath=Personal Queries/Test2/Test3/All Defects (make sure to replace spaces with %20)
+		repo=2.0.0
+		db=SAMPL
+	http://localhost:1880/compassData?username=admin&password=&queryPath=Personal%20Queries/Test2/Test3/All%20Defects&repo=2.0.0&db=SAMPL	
+	
 ## License
 
 /*
@@ -45,19 +120,6 @@ To build and then run the app, click on the play icon in the top left corner.
  
 */
 
-## Configuration Properties
-
-### Xcode
-
-Select the target and go to the Signing & Capabilities tab. Add the Background Modes capability and select Background fetch and Background processing.
-
-### App
-
-To connect to the Compass server, in the login screen, tap on the gear icon at the top right corner of the screen to enter the base URL of the Compass server and the database.
-
-In the iOS Settings for Compass, allow banners, sounds, and badges notifications, and enable Background Refresh. The logged in user will receive notifications when a new defect has been assigned to the user or when any modifications are made to a defect that the user currently owns.
-
-## Development
 
 ### Login Scene
 
@@ -73,28 +135,4 @@ The Login Scene displays a username textbox, a password textbox, a repo button, 
 <a href='#getrepos-api'>getRepos API</a> -> <a href='#login-api'>login API</a>
 </pre>
 
-
-#### API Details
-
-##### getRecordType API
-
-1. When the view controller `StateSelectionVC` is loaded, call the function `getRecordType()`.
-
-2. Make the function `getRecordType()` call the `getRecordType(completion: @escaping(Result<Data?, ApiError>) -> Void)` function in the class `TRXNetworkManager`. This will get the token, repo, the HTTP Method (GET), and the URL request required to execute the API call.
-
-3. Invoke the Compass getRecordType REST API call.
-
-	* If the Compass getRecordType REST API call is successfully made, decode the data to the struct `RecordType`.
-
-		1. In the function `tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell`, configure each cell in the table using the possible states inside the array of State structs `[State]`.
-
-	* If the Compass getRecordType REST API call fails, print the error status to the console.
-
-### Field Selection Scene
-
-![Field Selection Scene](statics/field_selection_scene.png)
-
-#### Overview
-
-The Field Selection Scene displays a list of field values for a specific field of a record. The list of field values is obtained from the result of invoking a Compass REST API. The user can choose any field value from the list.
 
