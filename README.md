@@ -1,13 +1,9 @@
-# CompassQuery
+# Compass-Query
 This repository contains the files necessary to create a Node-RED flow that will extract data from Compass for use in 3rd party software.
 
 ## Who is this tutorial for?
 
 This overview is intended for Compass Administrators who will assist their organization in providing easy access to Compass data for use in 3rd party software products.  The administrator will be responsible for setting up a Node-RED server and verifying the connection to Compass.
-
-## Architectural Overview
-
-Need help here showing the relationship between Node-RED, Compass, and 3rd party software products.
 
 ## Pre-requisites
 	Compass 2.0.1 + running with the API server
