@@ -16,7 +16,7 @@ This overview is intended for Compass Administrators who will assist their organ
 	Follow the directions at: https://nodered.org/#get-started
 	localhost:1880
 	
-## Download the Compass-Custom-Nodes zip file
+## Download the Compass-Query zip file
 	- Unzip The contents in a data directory <c:\compassdata>
 	- c:\compassdata\compass-custom-nodes-master\ contains the documentation, the packaged node, and the flows necessary for configuration.  
 	- c:\compassdata\compass-custom-nodes-master\compass-query contains the source files for packaging the node using npm pack
