@@ -23,15 +23,18 @@ This overview is intended for Compass Administrators who will assist their organ
 		Search on CSV
 		Select Install for the node-red-contrib-csvtojson
 	- To verify
-		In your palette, search on csv
+		In your palette, search on csv in the filter nodes prompt
+		![CSV Verification](statics/CSV.png)
 	- Install Compass Query  
 		Select the Node-RED hamburger icon
 		Select Manage Palette
 		Select the Install Tab
-		Search on Compass
+		Search on Compass 
 		Select Install for the node-red-contrib-hcl-compass-query
 	- To verify the Compass Query node was installed correctly
-		In your palette, search on compass
+		In your palette, search on compass in the filter nodes prompt
+		![Compass Verification](statics/Compass.png)
+
 	- Import the Flows:
 	- CompassIntegrationFlows.json (Contains both flows, you only need to import this one)
 		Select the Node-RED hamburger icon in the upper-right corner
@@ -77,7 +80,7 @@ At this point, you are ready to begin testing with Microsoft Power BI or Tableau
 
 
 ## Sub Folders
-	When configuring the Compass Query node, only the queries that exist either in the Personal Queries or Public Queries folders will be displayd in the drop down list.  If you need to access a query that is in a subfolder, you will need to use the queryPath parameter as in the following example:
+	When configuring the Compass Query node, only the queries that exist either in the Personal Queries or Public Queries folders will be displayed in the drop down list.  If you need to access a query that is in a subfolder, you will need to use the queryPath parameter as in the following example:
 		host=localhost
 		port=1880
 		username=admin
