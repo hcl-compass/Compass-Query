@@ -17,42 +17,42 @@ Follow the directions at: https://nodered.org/#get-started
 * In this example, Node-RED is installed on localhost:1880
 	
 ## Configure Node-RED for use
-- Install CSV to JSON node
-	Select the Node-RED hamburger icon
-	Select Manage Palette
-	Select the Install Tab
-	Search on CSV
-	Select Install for the node-red-contrib-csvtojson
-- To verify
-	In your palette, search on csv in the filter nodes prompt
+	- Install CSV to JSON node
+		Select the Node-RED hamburger icon
+		Select Manage Palette
+		Select the Install Tab
+		Search on CSV
+		Select Install for the node-red-contrib-csvtojson
+	- To verify
+		In your palette, search on csv in the filter nodes prompt
 ![CSV Verification](https://github.com/hcl-compass/Compass-Query/blob/main/statics/CSV.png)
 
-- Install Compass Query  
-	Select the Node-RED hamburger icon
-	Select Manage Palette
-	Select the Install Tab
-	Search on Compass 
-	Select Install for the node-red-contrib-hcl-compass-query
-- To verify the Compass Query node was installed correctly
-	In your palette, search on compass in the filter nodes prompt
+	- Install Compass Query  
+		Select the Node-RED hamburger icon
+		Select Manage Palette
+		Select the Install Tab
+		Search on Compass 
+		Select Install for the node-red-contrib-hcl-compass-query
+	- To verify the Compass Query node was installed correctly
+		In your palette, search on compass in the filter nodes prompt
 ![Compass Verification](https://github.com/hcl-compass/Compass-Query/blob/main/statics/Compass.png)
 
-- Import the Flows:
-[CompassIntegrationFlows.json](https://github.com/hcl-compass/Compass-Query/blob/main/example/CompassIntegrationFlows.json) (Contains both flows, you only need to import this one)
-	Select the Node-RED hamburger icon in the upper-right corner
-	Select Import then Clipboard
-	Select file to import
-	Select the CompassIntegrationFlows.json file (2 flows and 13 nodes should be imported)
-	Double-click the Compass Query node
+	- Import the Flows:
+		[CompassIntegrationFlows.json](https://github.com/hcl-compass/Compass-Query/blob/main/example/CompassIntegrationFlows.json) 
+		Select the Node-RED hamburger icon in the upper-right corner
+		Select Import then Clipboard
+		Select file to import
+		Select the CompassIntegrationFlows.json file (2 flows and 12 nodes should be imported)
+		Double-click the Compass Query node
 		Enter the following information for your Compass install:
-		host: <localhost>
-		port: <8190>
-		Username: <admin>
-		Password: <>
-		Application: <from dropdown 2.0.0-SAMPL>
-		Query: <Dashboard Data>
-	Select Done
-	Deploy the changes by selecting the Node-RED Deploy button.
+			host: <localhost>
+			port: <8190>
+			Username: <admin>
+			Password: <>
+			Application: <from dropdown 2.0.0-SAMPL>
+			Query: <Dashboard Data>
+		Select Done
+		Deploy the changes by selecting the Node-RED Deploy button.
 
 To Verify that everything is setup correctly, you should be able to open a browser: localhost:1881\compassData.  This will return data in the form of json from your query.
 
