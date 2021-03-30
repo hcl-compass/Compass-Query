@@ -10,7 +10,7 @@ Compass 2.0.1 + running with the API server
 
 At least 1 valid DB/Schema
 One query used for creating a dashboard called Dashboard Data
-In this example, the defect schema is used and the All Defects query is modified by adding Severity, Owner, and Priority fields.
+* In this example, the defect schema is used and the All Defects query is modified by adding Severity, Owner, and Priority fields.
 	
 ## Install Node-RED
 	Follow the directions at: https://nodered.org/#get-started
