@@ -25,6 +25,7 @@ This overview is intended for Compass Administrators who will assist their organ
 	- To verify
 		In your palette, search on csv in the filter nodes prompt
 ![CSV Verification](https://github.com/hcl-compass/Compass-Query/blob/main/statics/CSV.png)
+
 	- Install Compass Query  
 		Select the Node-RED hamburger icon
 		Select Manage Palette
