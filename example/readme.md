@@ -1,4 +1,4 @@
-# Here is the Example Readme
+# How to use the Compass Query Node
 
 ## Who is this tutorial for?
 
