@@ -37,8 +37,8 @@ Follow the directions at: https://nodered.org/#get-started
 		In your palette, search on compass in the filter nodes prompt
 ![Compass Verification](https://github.com/hcl-compass/Compass-Query/blob/main/statics/Compass.png)
 
+[CompassIntegrationFlows.json](https://github.com/hcl-compass/Compass-Query/blob/main/example/CompassIntegrationFlows.json) 
 	- Import the Flows:
-		[CompassIntegrationFlows.json](https://github.com/hcl-compass/Compass-Query/blob/main/example/CompassIntegrationFlows.json) 
 		Select the Node-RED hamburger icon in the upper-right corner
 		Select Import then Clipboard
 		Select file to import
