@@ -5,8 +5,8 @@
 This overview is intended for Compass Administrators who will assist their organization in providing easy access to Compass data for use in 3rd party software products.  The administrator will be responsible for setting up a Node-RED server and verifying the connection to Compass.
 
 ## Pre-requisites
->	Compass 2.0.1 + running with the API server
->	* In this example HCL Compass is running on localhost:8190
+	Compass 2.0.1 + running with the API server
+	* In this example HCL Compass is running on localhost:8190
 	At least 1 valid DB/Schema
 	One query used for creating a dashboard called Dashboard Data
 	In this example, the defect schema is used and the All Defects query is modified by adding Severity, Owner, and Priority fields.
