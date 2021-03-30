@@ -6,14 +6,14 @@ This overview is intended for Compass Administrators who will assist their organ
 
 ## Pre-requisites
 	Compass 2.0.1 + running with the API server
-	-In this example HCL Compass is running on localhost:8190
+	* In this example HCL Compass is running on localhost:8190
 	At least 1 valid DB/Schema
 	1 query used for creating a dashboard called Dashboard Data
 	In this example, the defect schema is used and the All Defects query is modified by adding Severity, Owner, and Priority fields.
 	
 ## Install Node-RED
 	Follow the directions at: https://nodered.org/#get-started
-	-In this example, Node-RED is installed on localhost:1880
+	* In this example, Node-RED is installed on localhost:1880
 	
 ## Configure Node-RED for use
 	- Install CSV to JSON node
