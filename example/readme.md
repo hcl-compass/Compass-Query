@@ -24,7 +24,7 @@ This overview is intended for Compass Administrators who will assist their organ
 		Select Install for the node-red-contrib-csvtojson
 	- To verify
 		In your palette, search on csv in the filter nodes prompt
-![CSV Verification](statics/CSV.png)
+![CSV Verification](https://github.com/hcl-compass/Compass-Query/blob/main/statics/CSV.png)
 	- Install Compass Query  
 		Select the Node-RED hamburger icon
 		Select Manage Palette
@@ -33,7 +33,7 @@ This overview is intended for Compass Administrators who will assist their organ
 		Select Install for the node-red-contrib-hcl-compass-query
 	- To verify the Compass Query node was installed correctly
 		In your palette, search on compass in the filter nodes prompt
-![Compass Verification](statics/Compass.png)
+![Compass Verification](https://github.com/hcl-compass/Compass-Query/blob/main/statics/Compass.png)
 
 	- Import the Flows:
 	- CompassIntegrationFlows.json (Contains both flows, you only need to import this one)
