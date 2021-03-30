@@ -9,7 +9,7 @@ This repository contains the files necessary to create a Node-RED flow that will
 ![Node Properties](statics/properties.png)
 
 ## Examples
-See the example documentation [here] (examples/README.md)
+See the example documentation [here] (/examples/README.md)
 
 ## Who is this tutorial for?
 
