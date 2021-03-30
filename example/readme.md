@@ -38,6 +38,7 @@ Follow the directions at: https://nodered.org/#get-started
 ![Compass Verification](https://github.com/hcl-compass/Compass-Query/blob/main/statics/Compass.png)
 
 [CompassIntegrationFlows.json](https://github.com/hcl-compass/Compass-Query/blob/main/example/CompassIntegrationFlows.json) 
+	
 	- Import the Flows:
 		Select the Node-RED hamburger icon in the upper-right corner
 		Select Import then Clipboard
