@@ -10,7 +10,7 @@ This repository contains the files necessary to create a Node-RED flow that will
 
 ## Examples
 See the example documentation [here](https://github.com/hcl-compass/Compass-Query/blob/main/example/readme.md)
-Or [here]((repo/blob/main/example/readme.md)
+Or [here](repo/blob/main/example/readme.md)
 
 ## Who is this tutorial for?
 
