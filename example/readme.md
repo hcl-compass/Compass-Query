@@ -13,8 +13,8 @@ One query used for creating a dashboard called Dashboard Data
 * In this example, the defect schema is used and the All Defects query is modified by adding Severity, Owner, and Priority fields.
 	
 ## Install Node-RED
-	Follow the directions at: https://nodered.org/#get-started
-	* In this example, Node-RED is installed on localhost:1880
+Follow the directions at: https://nodered.org/#get-started
+* In this example, Node-RED is installed on localhost:1880
 	
 ## Configure Node-RED for use
 	- Install CSV to JSON node
