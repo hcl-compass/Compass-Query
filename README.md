@@ -1,5 +1,14 @@
 # Compass-Query
-This repository contains the files necessary to create a Node-RED flow that will extract data from Compass for use in 3rd party software.
+The Compass Query node provides the necessary interface to create a connection to HCL Compass for the purpose of extracting data from defined queries.
+This repository contains the files necessary to create a Node-RED flow that will extract data from HCL Compass for use in 3rd party software.
+
+## Node Definition
+
+### Node Properties
+
+![Node Properties](statics/properties.png)
+
+
 
 ## Who is this tutorial for?
 
