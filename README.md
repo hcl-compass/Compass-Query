@@ -8,7 +8,8 @@ This repository contains the files necessary to create a Node-RED flow that will
 
 ![Node Properties](statics/properties.png)
 
-
+## Examples
+See the example documentation [here] (examples/README.md)
 
 ## Who is this tutorial for?
 
@@ -125,19 +126,5 @@ At this point, you are ready to begin testing with Microsoft Power BI
  
 */
 
-
-### Login Scene
-
-![Login Scene](statics/login_scene.png) ![Settings](statics/settings.png)
-
-#### Overview
-
-The Login Scene displays a username textbox, a password textbox, a repo button, and a settings icon. When the user selects the repo button, display the list of repos to choose. When the user selects the settings icon, display textboxes for the base URL of the Compass server and the database. Once the username, password, repo, database, and the base URL of the Compass server are provided by the user, login the user by invoking a Compass REST API.
-
-#### Login Scene Diagram
-
-<pre>
-<a href='#getrepos-api'>getRepos API</a> -> <a href='#login-api'>login API</a>
-</pre>
 
 
