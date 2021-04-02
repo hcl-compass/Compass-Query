@@ -25,7 +25,7 @@ Follow the directions at: https://nodered.org/#get-started
 		Select Install for the node-red-contrib-csvtojson
 	- To verify
 		In your palette, search on csv in the filter nodes prompt
-![CSV Verification](statics/CSV.png)
+![CSV Verification](/statics/CSV.png)
 
 	- Install Compass Query  
 		Select the Node-RED hamburger icon
@@ -35,7 +35,7 @@ Follow the directions at: https://nodered.org/#get-started
 		Select Install for the node-red-contrib-hcl-compass-query
 	- To verify the Compass Query node was installed correctly
 		In your palette, search on compass in the filter nodes prompt
-![Compass Verification](statics/Compass.png)
+![Compass Verification](/statics/Compass.png)
 
 [CompassIntegrationFlows.json](CompassIntegrationFlows.json) 
 	
