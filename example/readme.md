@@ -25,7 +25,7 @@ Follow the directions at: https://nodered.org/#get-started
 		Select Install for the node-red-contrib-csvtojson
 	- To verify
 		In your palette, search on csv in the filter nodes prompt
-![CSV Verification](/compass-query/statics/CSV.png)
+![CSV Verification](/Compass-Query/statics/CSV.png)
 
 	- Install Compass Query  
 		Select the Node-RED hamburger icon
