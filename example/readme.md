@@ -59,6 +59,17 @@ To Verify that everything is setup correctly, you should be able to open a brows
 
 At this point, you are ready to begin testing with Microsoft Power BI or Tableau
 
+## Sub Folders
+	When configuring the Compass Query node, only the queries that exist either in the Personal Queries or Public Queries folders will be displayed in the drop down list.  If you need to access a query that is in a subfolder, you will need to use the queryPath parameter as in the following example:
+		host=localhost
+		port=1880
+		username=admin
+		password=
+		queryPath=Personal Queries/Test2/Test3/All Defects (make sure to replace spaces with %20)
+		repo=2.0.0
+		db=SAMPL
+	http://localhost:1880/compassData?username=admin&password=&queryPath=Personal%20Queries/Test2/Test3/All%20Defects&repo=2.0.0&db=SAMPL	
+
 ## Execute Query Example 1 
 	The Compass Query Node can be configured with a username/password, repo/db, and querypath.  Each of these can be sent on the URL request as parameters:
 		host=localhost
@@ -80,18 +91,6 @@ At this point, you are ready to begin testing with Microsoft Power BI or Tableau
 		repo=2.0.0
 		db=safe
 	http://localhost:1880/compassData?username=admin&password=&queryPath=Personal%20queries/All%20Stories&repo=2.0.0&db=safe
-
-
-## Sub Folders
-	When configuring the Compass Query node, only the queries that exist either in the Personal Queries or Public Queries folders will be displayed in the drop down list.  If you need to access a query that is in a subfolder, you will need to use the queryPath parameter as in the following example:
-		host=localhost
-		port=1880
-		username=admin
-		password=
-		queryPath=Personal Queries/Test2/Test3/All Defects (make sure to replace spaces with %20)
-		repo=2.0.0
-		db=SAMPL
-	http://localhost:1880/compassData?username=admin&password=&queryPath=Personal%20Queries/Test2/Test3/All%20Defects&repo=2.0.0&db=SAMPL	
 	
 ## License
 
