@@ -6,7 +6,7 @@ This repository contains the files necessary to create a Node-RED flow that will
 
 ### Node Properties
 
-![Node Properties](statics/properties.png)
+![Node Properties](https://github.com/hcl-compass/Compass-Query/blob/main/statics/properties.png)
 
 ## Examples
 See the example documentation [here](https://github.com/hcl-compass/Compass-Query/blob/main/example/readme.md)
