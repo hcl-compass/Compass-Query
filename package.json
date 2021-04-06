@@ -1,10 +1,14 @@
 {
 	"name": "compass-query",
-	"description": "",
-	"version": "0.0.4",
+	"license": "Apache-2.0",
+	"description": "The Compass-Query node provides connection to HCL Compass",
+	"homepage": "https://https://github.com/hcl-compass/Compass-Query#readme",
+	"version": "0.0.5",
 	"main": "compass-query.js",
 	"keywords": [
-		"node-red"
+		"node-red",
+		"compass",
+		"HCL"
 	],
 	"node-red": {
 		"nodes": {
@@ -14,5 +18,9 @@
 	"dependencies": {
 		"events": "^3.1.0",
 		"request": "^2.88.2"
-	}
+	},
+	"repository": {
+    "type": "git",
+    "url": "git+https://https://github.com/hcl-compass/Compass-Query.git"
+  }
 }
