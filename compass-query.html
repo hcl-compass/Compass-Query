@@ -1,0 +1,771 @@
+<script src="//rawgithub.com/indrimuska/jquery-editable-select/master/dist/jquery-editable-select.min.js"></script>
+<link href="//rawgithub.com/indrimuska/jquery-editable-select/master/dist/jquery-editable-select.min.css" rel="stylesheet">
+<!----
+  (c) Copyright HCL Technologies Ltd. 2021 All rights reserved
+---->
+<script type="text/javascript">
+    RED.nodes.registerType('compass-query',{
+        category: 'HCL',
+        color: '#4696d2',
+        defaults: {
+			name: {value:""},
+			username: {value:""},
+			password: {value:""},
+            host: {value: ""},
+            port: {value: ""},
+            repo: {value: ""},
+            db: {value: ""},
+            token: {value: ""},
+            queryList: {value: ""},
+            dbID: {value: ""},
+			resultID: {value:""},
+			file: {value:""},
+			errorMsg: {value: ""}, 
+			showerror: {value: ""},
+			queryDef: {value: ""},
+			queryDefVal: {value: ""},
+			queryDefChecked: {value: ""},
+			appList: {value: ""},
+            app: {value: ""},
+            rootFolders: {value: ""},
+            folderDbId: {value: ""}
+        },
+        inputs: 1,
+        outputs: 1,
+        icon: "compass-white-logo.png", 
+        label: function() {
+            return this.name || "Compass Query";
+        },
+        
+        oneditprepare: function() {
+			var that = this;
+			var appListClicked = false;
+			var queryListClicked = false;
+			var folderListClicked = false;
+
+			const debug = false;
+			// set error message to blank initially 
+			$("#node-input-errorMsg").val("");
+			//if checked set value to 1 else 0
+			if($("#node-input-queryDef").prop('checked')) {
+				$("#node-input-queryDefChecked").val(1);
+			} else {
+				$("#node-input-queryDefChecked").val(0);
+				// clear queryDefVal if unchecked
+				$("#node-input-queryDefVal").val("");
+			}
+			
+			$("#node-input-appList").click(function() {
+				if($("#node-input-showerror").val() == "1") {
+					$("#node-input-errorMsg").val("");
+				}
+				$("#node-input-app").val("empty");
+				var host = $("#node-input-host").val();
+				var port = parseInt($("#node-input-port").val(), 10);
+				if(port && host.length > 0) {
+					getRepos(host, port);
+				}
+				appListClicked = true;
+			});
+			$("#node-input-app").change(function() {
+				// translate app combo into separate db and repo
+				var app = $("#node-input-app").val();
+				var appArray = app.split('-');
+				log(appArray);
+				if(appListClicked && app !== "empty") {
+					$("#node-input-repo").val(appArray[0]).trigger('change');
+					$("#node-input-db").val(appArray[1]).trigger('change');
+				}
+			});
+		
+			$("#node-input-queryDef").change(function() {
+				// set value to 1 if checked else 0
+				if($("#node-input-queryDef").prop('checked')) {
+					$("#node-input-queryDefChecked").val(1);
+				} else {
+					$("#node-input-queryDefChecked").val(0);
+					// clear queryDefVal if unchecked
+					$("#node-input-queryDefVal").val("");
+				}
+				var checked = $("#node-input-queryDefChecked").val();
+				var host = $("#node-input-host").val();
+				var port = parseInt($("#node-input-port").val(), 10);
+				var repo = $("#node-input-repo").val();
+				var db = $("#node-input-db").val();
+				var username = $("#node-input-username").val();
+				var password = $("#node-input-password").val();
+				var dbID = $("#node-input-dbID").val();
+				var token = $("#node-input-token").val();
+				if(port && checked == 0 && token !== 0){
+					if(host.length > 0 && repo.length > 0 && db.length > 0 && dbID.length > 0) {
+						getResultSetID(host, port, repo, db, dbID, token);
+					}
+				}
+				else if(checked == 1 && port){
+					if(host.length > 0 && repo.length > 0 && db.length > 0 && dbID.length > 0) {
+						getQueryDef(host, port, repo, db, dbID, token);
+					}
+				}
+			});
+					
+			$("#node-input-repo").change(function() {
+				if($("#node-input-showerror").val() == "1") {
+					$("#node-input-errorMsg").val("");
+				}
+				var port = parseInt($("#node-input-port").val(), 10);
+				var host = $("#node-input-host").val();
+				var repo = $("#node-input-repo").val();
+				var db = $("#node-input-db").val();
+				var username = $("#node-input-username").val();
+				var password = $("#node-input-password").val();
+				var token = $("#node-input-token").val();
+				if(port){
+					if(host.length > 0 && repo.length > 0 && db.length > 0 && username.length > 0) {
+						getToken(host, port, repo, db, username, password);
+					}
+				}
+			});
+					
+			$("#node-input-db").change(function() {
+				if($("#node-input-showerror").val() == "1") {
+					$("#node-input-errorMsg").val("");
+                }
+				var port = parseInt($("#node-input-port").val(), 10);
+				var host = $("#node-input-host").val();
+				var repo = $("#node-input-repo").val();
+				var db = $("#node-input-db").val();
+				var username = $("#node-input-username").val();
+				var password = $("#node-input-password").val();
+				var token = $("#node-input-token").val();
+							
+				if(port && token == 0){
+					if(host.length > 0 && repo.length > 0 && db.length > 0 && username.length > 0) {
+						getToken(host, port, repo, db, username, password);
+					}
+				}
+			});
+					
+			$("#node-input-username").change(function() {
+				if($("#node-input-showerror").val() == "1") {
+					$("#node-input-errorMsg").val("");
+				}
+				var port = parseInt($("#node-input-port").val(), 10);
+				var host = $("#node-input-host").val();
+				var repo = $("#node-input-repo").val();
+				var db = $("#node-input-db").val();
+				var username = $("#node-input-username").val();
+				var password = $("#node-input-password").val();
+				var token = $("#node-input-token").val();
+							
+				if(port && token == 0){
+					if(host.length > 0 && repo.length > 0 && db.length > 0 && username.length > 0 ) {
+						getToken(host, port, repo, db, username, password);
+					}
+				}
+			});
+					
+			$("#node-input-password").change(function() {
+				if($("#node-input-showerror").val() == "1") {
+					$("#node-input-errorMsg").val("");
+				}
+				var port = parseInt($("#node-input-port").val(), 10);
+				var host = $("#node-input-host").val();
+				var repo = $("#node-input-repo").val();
+				var db = $("#node-input-db").val();
+				var username = $("#node-input-username").val();
+				var password = $("#node-input-password").val();
+				var token = $("#node-input-token").val();
+							
+				if(port && token == 0){
+					if(host.length > 0 && repo.length > 0 && db.length > 0 && username.length > 0 ) {
+						getToken(host, port, repo, db, username, password);
+					}
+				}
+			});
+
+			$("#node-input-token").change(function() {
+				if($("#node-input-showerror").val() == "1") {
+					$("#node-input-errorMsg").val("");
+				}	
+				var port = parseInt($("#node-input-port").val(), 10);
+				var host = $("#node-input-host").val();
+				var repo = $("#node-input-repo").val();
+				var db = $("#node-input-db").val();
+				var token = $("#node-input-token").val();
+				var app = $("#node-input-app").val();
+				var folderDbId = $("#node-input-folderDbId").val();
+                if(port && (appListClicked || queryListClicked || folderListClicked) && app !== "empty") {
+					if(host.length > 0 && repo.length > 0 && db.length > 0 && token !== 0 && (appListClicked || folderListClicked)) {
+                        getRootFolders(host, port, repo, db, token);
+					} else if(host.length > 0 && repo.length > 0 && db.length > 0 && token !== 0 && queryListClicked){
+                        populateList(host, port, repo, db, token, folderDbId);
+					}
+                }
+            });
+            
+            $("#node-input-folderDbId").change(function() {
+                if($("#node-input-showerror").val() == "1") {
+					$("#node-input-errorMsg").val("");
+                }	
+                var port = parseInt($("#node-input-port").val(), 10);
+				var host = $("#node-input-host").val();
+				var repo = $("#node-input-repo").val();
+				var db = $("#node-input-db").val();
+				var token = $("#node-input-token").val();
+                var app = $("#node-input-app").val();
+                var folderDbId = $("#node-input-folderDbId").val();
+                if(port && (appListClicked || folderListClicked)  && app !== "empty") {
+                    if(host.length > 0 && repo.length > 0 && db.length > 0 && token !== 0 && folderDbId.length > 0) {
+                        populateList(host, port, repo, db, token, folderDbId);
+                    }
+                }
+            });
+
+			$("#node-input-dbID").change(function() {
+				if($("#node-input-showerror").val() == "1") {
+					$("#node-input-errorMsg").val("");
+				}
+				var port =  parseInt($("#node-input-port").val(), 10);
+				var host = $("#node-input-host").val();
+				var repo = $("#node-input-repo").val();
+				var db = $("#node-input-db").val();
+				var token = $("#node-input-token").val();
+				var dbID = $("#node-input-dbID").val();
+				var queryDefChecked = $("#node-input-queryDefChecked").val();
+                if(queryDefChecked == 0 && port) {
+					if(host.length > 0 && repo.length > 0 && db.length > 0 && dbID.length > 0) {
+						getResultSetID(host, port, repo, db, dbID, token);
+					}
+				}
+				else if(port && queryDefChecked == 1) {
+					if(host.length > 0 && repo.length > 0 && db.length > 0 && dbID.length > 0) {
+						getQueryDef(host, port, repo, db, dbID, token);
+					}
+				}
+			});
+
+			$("#node-input-resultID").change(function() {
+				if($("#node-input-showerror").val() == "1") {
+					$("#node-input-errorMsg").val("");
+				}
+				var port =  parseInt($("#node-input-port").val(), 10);
+				var host = $("#node-input-host").val();
+				var repo = $("#node-input-repo").val();
+				var db = $("#node-input-db").val();
+				var token = $("#node-input-token").val();
+				var dbID = $("#node-input-dbID").val();
+				var resultID = $("#node-input-resultID").val();
+				var fileType = "CSV";
+				var queryDefChecked = $("#node-input-queryDefChecked").val();
+                if(repo && db && queryDefChecked == 0 && resultID) {
+                    getAsFile(host, port, db, fileType, dbID, repo, resultID, token);
+                }
+			});
+			
+			$('#node-input-rootFolders').click(function() {
+				if($("#node-input-showerror").val() == "1") {
+					$("#node-input-errorMsg").val("");
+				}	
+				var port = parseInt($("#node-input-port").val(), 10);
+				var host = $("#node-input-host").val();
+				var repo = $("#node-input-repo").val();
+				var db = $("#node-input-db").val();
+				var app = $("#node-input-app").val();
+				var username = $("#node-input-username").val();
+				var password = $("#node-input-password").val();
+				folderListClicked = true;
+				if(port && app !== "empty" && !appListClicked){
+					if(host.length > 0 && repo.length > 0 && db.length > 0 && username.length > 0) {
+						getToken(host, port, repo, db, username, password);
+					}
+				}
+			});
+
+			$('#node-input-queryList').click(function() {
+				if($("#node-input-showerror").val() == "1") {
+					$("#node-input-errorMsg").val("");
+				}	
+				var port = parseInt($("#node-input-port").val(), 10);
+				var host = $("#node-input-host").val();
+				var repo = $("#node-input-repo").val();
+				var db = $("#node-input-db").val();
+				var app = $("#node-input-app").val();
+				var username = $("#node-input-username").val();
+				var password = $("#node-input-password").val();
+				queryListClicked = true;
+
+				if(port && app !== "empty" && !appListClicked && !folderListClicked) {
+					if(host.length > 0 && repo.length > 0 && db.length > 0 && username.length > 0) {
+						getToken(host, port, repo, db, username, password);
+					}
+				}
+			});
+
+			// console log when debug is true
+			function log(message) {
+				if(debug){
+					console.log(message);
+				}
+			}
+
+			// make request to Compass API to get token
+			function getToken(host, port, repo, db, username, password) {
+				log("Getting token...");
+				var error = true;
+				var xmlHttp = new XMLHttpRequest();
+				var url = "https://"+host+":"+port+"/ccmweb/rest/authenticate";				
+				var data = ({"username": username, "password": password, "repo": repo, "db": db});
+				var replacer = function (key, value) {
+					return typeof value === 'undefined' ? "" : value;
+				}
+				var result = JSON.stringify(data, replacer);
+				log(result);
+				xmlHttp.onreadystatechange = function() {
+					log(xmlHttp.responseText);
+					if(xmlHttp.readyState == 4 && xmlHttp.status == 201) {
+						error = false;
+						var json = JSON.parse(xmlHttp.responseText);
+						$("#node-input-token").val(json.token).trigger('change');
+					}
+					else if(xmlHttp.readyState == 4 && error) {
+						populateErrorMsg('Request to "' + url + '" failed.');
+					}
+				}
+				try {
+					xmlHttp.open("POST", url, true); // true for asynchronous 
+					xmlHttp.setRequestHeader("Content-Type", "application/json");
+					xmlHttp.send(result);
+				} catch(e) {
+					log(e);
+					populateErrorMsg('Request to "' + url + '" failed.');
+				}
+            }
+			
+			// make request to Compass API to get available repository and database options
+            function getRepos(host, port){
+				log("Getting repository and database options...");
+                var error = true;
+				var xmlHttp = new XMLHttpRequest();
+				// sending true to get database names
+                var getDbs = true;
+                var url = "https://"+host+":"+port+"/ccmweb/rest/repos?getDbs="+getDbs;
+                var data = {"getDbs": getDbs};
+                
+                xmlHttp.onreadystatechange = function() {
+                    log(xmlHttp.responseText);
+                    if(xmlHttp.readyState == 4 && xmlHttp.status == 200){
+                        error = false;
+                        var json = JSON.parse(xmlHttp.responseText);
+                        var options = '';
+                        var selectedApp;
+                        var storedApp = $("#node-input-app").val();
+                     	
+                        for(i in json) {
+                            if(json[i].name.length > 0 && json[i].databaseNames.length > 0) {
+                                if(json[i].databaseNames.length > 1) {
+                                    var repo = json[i].name;
+                                    for(j in json[i].databaseNames) {
+                                        options = options + '<option value="'+repo+'-' + json[i].databaseNames[j] +'">'+repo+'-'+json[i].databaseNames[j]+'</option>';
+                                    }
+                                } else {
+                                    options = options + '<option value="'+json[i].name+'-' + json[i].databaseNames +'">'+json[i].name+'-'+json[i].databaseNames+'</option>';
+                                }
+                            }
+						}
+                        
+                        $("#node-input-appList").replaceWith(
+							'<select name="node-input-appList" id="node-input-appList" required>'
+								+ options +  
+							'</select>'
+						);
+                        $('#node-input-appList').editableSelect().on('select.editable-select', function(e, li) {
+        					$('#node-input-appList').val(li.text());
+        					$('#node-input-appList').change();
+                        });
+        				  
+        				$('#node-input-appList').change(function() {
+                            for(i in json) {
+                            	if(json[i].databaseNames.length > 1) {
+                            		for(j in json[i].databaseNames) {
+                            			if((json[i].name + '-' + json[i].databaseNames[j]) === $('#node-input-appList').val()) {
+                            				selectedApp = json[i].name + '-' + json[i].databaseNames[j];
+                            			}
+                            		}
+                            	} else {
+                            		if((json[i].name + '-' + json[i].databaseNames) === $('#node-input-appList').val()) {
+                                        selectedApp = json[i].name + '-' + json[i].databaseNames;
+                                    }
+                            	}
+                            }
+                            if(selectedApp && storedApp === "empty") {
+                                log("The selected app is: " + selectedApp);
+                                $("#node-input-app").val(selectedApp).trigger('change');
+                            }
+                        });
+                    } 
+                    else if(xmlHttp.readyState == 4 && error) {
+						populateErrorMsg('Request to "' + url + '" failed.');
+					}
+            	}
+            	try {
+					xmlHttp.open("GET", url, true); // true for asynchronous 
+                	xmlHttp.setRequestHeader("Content-Type", "application/json");
+            		xmlHttp.send(data);
+				} catch(e) {
+					log(e);
+					populateErrorMsg('Request to "' + url + '" failed.');
+				}
+            }
+            
+            // make request to Compass API to get available root folders to choose from
+            function getRootFolders(host, port, repo, db, token) {
+                var error = true;
+                var xmlHttp = new XMLHttpRequest();
+                var url = "https://"+host+":"+port+"/ccmweb/rest/repos/"+repo+"/databases/"+db+"/workspace/folders";
+                var data = ({"repo": repo, "db": db, "token": token});
+
+                xmlHttp.onreadystatechange = function() {
+                    log(xmlHttp.responseText);
+                    if (xmlHttp.readyState == 4 && xmlHttp.status == 200){
+                        error = false;
+                        var json = JSON.parse(xmlHttp.responseText);
+                        var options ='';
+                        for (i in json) {
+                            if(json[i].name.length > 0) {
+                                options = options + '<option value="'+json[i].dbId+'">'+json[i].name+'</option>';
+                            }
+                        }
+
+                        $('#node-input-rootFolders').replaceWith(
+        						'<select name="node-input-rootFolders" id="node-input-rootFolders" required>'
+        				  		+ options + 
+								'</select>'
+						);
+        				$('#node-input-rootFolders').editableSelect().on('select.editable-select', function(e, li) {
+        					  	$('#node-input-rootFolders').val(li.text());
+        					  	$('#node-input-rootFolders').change();
+        				});
+        				  
+        				$('#node-input-rootFolders').change(function() {
+                            var selectedRootFolder;
+        					for(i in json) {
+        						if(json[i].name === $('#node-input-rootFolders').val()) {
+                                    selectedRootFolder = json[i].dbId;
+        						}
+        					}
+        					if(selectedRootFolder) {
+								$("#node-input-folderDbId").val(selectedRootFolder).trigger('change');
+        					}
+						});
+                    } else if(xmlHttp.readyState == 4 && error) {
+						populateErrorMsg('Request to "' + url + '" failed.');
+					}
+                } 
+                try {
+					xmlHttp.open("GET", url, true); // true for asynchronous 
+					xmlHttp.setRequestHeader("Authorization", "Bearer " + token);
+					xmlHttp.setRequestHeader("Content-Type", "application/json");
+					xmlHttp.send(data);
+				} catch(e) {
+					log(e);
+					populateErrorMsg('Request to "' + url + '" failed.');
+				}	
+            }
+
+			// make request to Compass API to get list of query names available in specified root folder
+            function populateList(host, port, repo, db, token, folderDbId) {
+				var error = true;
+            	var xmlHttp = new XMLHttpRequest();
+				var url = "https://"+host+":"+port+"/ccmweb/rest/repos/"+repo+"/databases/"+db+"/workspace/folders/"+folderDbId+"/queryDefs";
+            	var data = ({"repo": repo, "db": db, "token": token, "folder_dbid": folderDbId});
+            	
+            	xmlHttp.onreadystatechange = function() { 
+					log(xmlHttp.responseText);
+            		if (xmlHttp.readyState == 4 && xmlHttp.status == 200){
+						error = false;
+                        var json = JSON.parse(xmlHttp.responseText);
+	                	var options='';
+	                	for (i in json) {
+	                		if(json[i].name.length > 0) {
+								options = options + '<option value="'+json[i].dbId+'">'+json[i].name+'</option>';
+							}	
+						}
+	                	$('#node-input-queryList').replaceWith(
+        						'<select name="node-input-queryList" id="node-input-queryList" required>'
+        				  		+ options + 
+								'</select>'
+						);
+        				$('#node-input-queryList').editableSelect().on('select.editable-select', function(e, li) {
+        					  	$('#node-input-queryList').val(li.text());
+        					  	$('#node-input-queryList').change();
+        				});
+        				  
+        				$('#node-input-queryList').change(function() {
+        					var selectedDBID;
+        					for(i in json) {
+        						if(json[i].name === $('#node-input-queryList').val()) {
+        							selectedDBID = json[i].dbId;
+									log("The selected dbID is: " + selectedDBID);
+        						}
+        					}
+        					if(selectedDBID) {
+								$("#node-input-dbID").val(selectedDBID).trigger('change');
+        					}
+						});
+					}
+					else if(xmlHttp.readyState == 4 && error) {
+						populateErrorMsg('Request to "' + url + '" failed.');
+					}
+				}
+				try {
+					xmlHttp.open("GET", url, true); // true for asynchronous 
+					xmlHttp.setRequestHeader("Authorization", "Bearer " + token);
+					xmlHttp.setRequestHeader("Content-Type", "application/json");
+					xmlHttp.send(data);
+				} catch(e) {
+					log(e);
+					populateErrorMsg('Request to "' + url + '" failed.');
+				}	
+			}
+			
+			// make request to Compass API to get query definition
+			function getQueryDef(host, port, repo, db, dbID, token) {
+				var error = true;
+				var xmlHttp = new XMLHttpRequest();
+				var url = "https://" + host + ":" + port+ "/ccmweb/rest/repos/" + repo + "/databases/" + db + "/workspace/queryDefs/" + dbID;
+				var data = {"database": db, "repo": repo, "query_dbid": dbID};
+				var requestBody = JSON.stringify(data);
+				log(requestBody);
+		
+				xmlHttp.onreadystatechange = function() {
+					log(xmlHttp.responseText);
+					if(xmlHttp.readyState == 4 && xmlHttp.status == 200) {
+						error = false;
+						var json = JSON.parse(xmlHttp.responseText);
+						log(JSON.stringify(json));
+						$("#node-input-queryDefVal").val(JSON.stringify(json));
+					}
+					else if(xmlHttp.readyState == 4 && error) {
+						populateErrorMsg('Request to "' + url + '" failed.');
+					}
+				}
+				try {
+					xmlHttp.open("GET", url, true); // true for asynchronous 
+					xmlHttp.setRequestHeader("Authorization", "Bearer " + token);
+					xmlHttp.setRequestHeader("Content-Type", "application/json");
+					xmlHttp.send(requestBody);
+				} catch(e) {
+					log(e);
+					populateErrorMsg('Request to "' + url + '" failed.');
+				}
+			}
+
+			// make request to Compass API to get resultSetID
+			function getResultSetID(host, port, repo, db, dbID, token) {
+				var error = true;
+				var xmlHttp = new XMLHttpRequest();
+				var url = "https://"+host+":"+port+"/ccmweb/rest/repos/"+repo+"/databases/"+db+"/workspace/queryDefs/"+dbID+"/resultsets";
+				var resultOpts = ({"enableRecordCount": true, "convertToLocalTime": true, "maxMultiLineTextLength": 20, "maxResultSetRows": 2, "pageSize": 5});
+				var data = ({"database": db, "query_dbid": dbID, "repo": repo, "resultSetOptions": resultOpts});
+				var requestBody = JSON.stringify(data);
+				log(requestBody);
+				xmlHttp.onreadystatechange = function() {
+					log(xmlHttp.responseText);
+					if(xmlHttp.readyState == 4 && xmlHttp.status == 201) {
+						error = false;
+						var json = JSON.parse(xmlHttp.responseText);
+						$("#node-input-resultID").val(json.result_set_id).trigger('change');
+						log("The result set id stored is: " + $("#node-input-resultID").val());
+					}
+					else if(xmlHttp.readyState == 4 && error) {
+						populateErrorMsg('Request to "' + url + '" failed.');
+					}
+				}
+				try {
+					xmlHttp.open("POST", url, true); // true for asynchronous 
+					xmlHttp.setRequestHeader("Authorization", "Bearer " + token);
+					xmlHttp.setRequestHeader("Content-Type", "application/json");
+					xmlHttp.send(requestBody);
+				} catch(e) {
+					log(e);
+					populateErrorMsg('Request to "' + url + '" failed.');
+				}
+			}
+
+			// make request to Compass API to get delimited file after execution of query
+			function getAsFile(host, port, db, fileType, dbID, repo, resultID, token) {
+				var error = true;
+				var xmlHttp = new XMLHttpRequest();
+				var url = "https://"+host+":"+port+"/ccmweb/rest/repos/"+repo+"/databases/"+db+"/workspace/queryDefs/"+dbID+"/resultsets/"+resultID+"/file";
+				var data = ({"database": db, "fileType": fileType, "query_dbid": dbID, "repo": repo, "result_set_id": resultID});
+				xmlHttp.onreadystatechange = function() {
+					log(xmlHttp.responseText);
+					if(xmlHttp.readyState == 4 && xmlHttp.status == 200) {
+						error = false;
+						var response = xmlHttp.responseText;
+						$("#node-input-file").val(response);
+						$("#node-input-showerror").val("1");
+						log("Our returned delimited file is: " + $("#node-input-file").val());
+					}
+					else if(xmlHttp.readyState == 4 && error) {
+						populateErrorMsg('Request to "' + url + '" failed.');
+					}
+				}
+				try {
+					xmlHttp.open("GET", url, true); // true for asynchronous 
+					xmlHttp.setRequestHeader("Authorization", "Bearer " + token);
+					xmlHttp.setRequestHeader("Content-Type", "application/json");
+					xmlHttp.send(data);
+				} catch(e) {
+					log(e);
+					populateErrorMsg('Request to "' + url + '" failed.');
+				}
+			}
+            
+			function populateErrorMsg(errorMsg) {
+				var errorLength = $("#node-input-errorMsg").val().length;
+				if(errorLength == 0) {
+					$("#node-input-errorMsg").val(errorMsg);
+				}
+				errorLength = $("#node-input-errorMsg").val().length;
+			}
+        }
+    });
+</script>
+
+<script type="text/x-red" data-template-name="compass-query">
+    <div class="form-row">
+        <label for="node-input-name"><i class="icon-tag"></i> Name</label>
+        <input type="text" id="node-input-name" placeholder="Name">
+    </div>
+    <div class="form-row">
+        <label for="node-input-host"><i class="fa fa-globe" aria-hidden="true"></i> Host</label>
+        <input type="text" id="node-input-host" required="required" placeholder="localhost" style="width:35%">
+		<label for="node-input-port" style="width:60px"><i class="fa fa-plug" aria-hidden="true"></i> Port</label>
+        <input type="number" id="node-input-port" required="required" placeholder="1234" style="width:65px">
+	</div>
+	<div class="form-row">
+        <label for="node-input-username"><i class="fa fa-user-circle" aria-hidden="true"></i> Username</label>
+		<input type="text"id="node-input-username" required="required" placeholder="username">
+    </div>
+	<div class="form-row">
+        <label for="node-input-password"><i class="fa fa-lock" aria-hidden="true"></i> Password</label>
+        <input type = "password" id="node-input-password" required="required" placeholder="password">
+	</div>
+    <div class="form-row">
+        <label for="node-input-appList"><i class="fa fa-database" aria-hidden="true"></i> Application</label>
+        <input type="text" id="node-input-appList" required="required">
+    </div>
+    <div class="form-row">
+        <label for="node-input-rootFolders"><i class="fa fa-list" aria-hidden="true"></i> Root Folder</label>
+		<input type="text" id="node-input-rootFolders" required="required">
+	</div>
+    <div class="form-row">
+        <label for="node-input-queryList"><i class="fa fa-list" aria-hidden="true"></i> Query</label>
+		<input type="text" id="node-input-queryList" required="required">
+	</div>
+	<div class="form-row">
+		<label for="node-input-queryDef"><i class="fa fa-book" aria-hidden="true"></i> Definition</label>
+		<input type="checkbox" id="node-input-queryDef" style="display:inline-block; width:15px; vertical-align:baseline">
+	</div>
+	<div class="form-row">
+        <label for="node-input-token"></label>
+        <input type="hidden" id="node-input-token" value=0>
+    </div>
+	<div class="form-row">
+		<label for="node-input-errorMsg"><i class="fa fa-exclamation-triangle" aria-hidden="true"></i> Error</label>
+		<textarea id="node-input-errorMsg" rows="5" style="width:70%; color:red;" placeholder="If an error occurs during configuration it will appear here." readonly></textarea>
+    </div>
+    <div class="form-row">
+        <label for="node-input-folderDbId"></label>
+        <input type="hidden" id="node-input-folderDbId">
+    </div>
+    <div class="form-row">
+        <label for="node-input-dbID"></label>
+        <input type="hidden" id="node-input-dbID">
+    </div>
+	<div class="form-row">
+        <label for="node-input-resultID"></label>
+        <input type="hidden" id="node-input-resultID">
+    </div>
+    <div class="form-row">
+        <label for="node-input-repo"></label>
+		<input type="hidden" id="node-input-repo">
+    </div>
+    <div class="form-row">
+        <label for="node-input-db"></label>
+		<input type="hidden" id="node-input-db">
+	</div>
+	<div class="form-row">
+        <label for="node-input-app"></label>
+		<input type="text" id="node-input-app" style="display:none">
+    </div>
+	<div class="form-row">
+        <label for="node-input-file"></label>
+        <input type="hidden" id="node-input-file">
+	</div>
+	<div class="form-row">
+        <label for="node-input-queryDefVal"></label>
+        <input type="hidden" id="node-input-queryDefVal">
+	</div>
+	<div class="form-row">
+		<label for="node-input-queryDefChecked"></label>
+		<input type="text" id="node-input-queryDefChecked" value = 0 style="display: none">
+	</div>
+	<div class="form-row">
+        <label for="node-input-clicked"></label>
+        <input type="hidden" id="node-input-clicked" value=false>
+	</div>
+	<div class="form-row">
+		<label for="node-input-showerror"></label>
+		<input type="text" id="node-input-showerror" value = "0" style="display: none">
+	</div>
+</script>
+
+
+<script type="text/x-red" data-help-name="compass-query">
+	<h3><b>compass-query</b></h3>
+    <p> The compass query node does several requests to the Compass Rest APIs in order to retrieve the desired query. </p>
+		<h3>INPUTS</h3>
+			<h4>The input can be provided from a JSON string and/or from the properties of the node itself.</h4>
+			<dl class="message-properties">
+				<dt> msg.payload
+					<span class="property-type">JSON string</span>
+				</dt>
+				<dd>
+					This JSON string may specify:
+					<ul>
+						<li>Username</li>
+						<li>Password</li>
+						<li>Repository (repo)</li>
+						<li>Database (db)</li>
+						<li>Host</li>
+						<li>Port</li>
+						<li>Query</li>
+						<li>Query Definition (queryDef)</li>
+					</ul>
+				</dd>
+				<code> i.e.: {"username": "admin", "password": " ", "repo": "1.0.0", "db": "SAMPL", "host": "localhost", "port": 8190, "query": "My Query", "queryDef": true} </code><br>
+				<em><b>Note:</b> 
+					1). Database input (db) is case sensitive. <br>
+						i.e: If database name is "DATABASE" then entering the name as "database" will cause an error to occur with code 400.
+					2). Query Definition input (queryDef) parameter is not required. If a value is not specified then queryDef will be false by default.</em>
+            </dl>
+		<h3>OUTPUTS</h3>
+				<dl class="message-properties">
+					<dt>msg.payload
+					</dt>
+						<dd>If the Query Definition option has been selected in the node properties or passed as a parameter with a value of true, then the definition of the specified query will be returned. Otherwise, a delimited text file is returned to msg.payload from Compass containing information about the desired query. </dd>
+				</dl>
+		<h3>PROPERTIES</h3>
+		<ul>
+			<li><b>Username:</b> Username is required to authenticate with the CCM Rest Server.</li>
+			<li><b>Password:</b> Password is required to authenticate with the CCM Rest Server.</li>
+			<li><b>Repository:</b> The name of a CCM repository containing the desired workspace to retrieve queries from.</li>
+			<li><b>Database:</b> The name of a database, within the repository, which contains the desired workspace to retrieve queries from.</li>
+			<li><b>Host:</b> ID address of the host the request will be sent to.</li>
+			<li><b>Port:</b> Name of the port in the Compass server.</li>
+			<li><b>Query:</b> The name of the query to execute.</li>	
+			<li><b>Query Definition:</b> If checkbox is selected, the definition of the query will be returned.</li>	
+		</ul>
+</script>
