@@ -1,20 +1,20 @@
-# How to use the Compass Query Node
+# How to use the HCL Compass Query Node
 
 ## Who is this tutorial for?
 
-This overview is intended for Compass Administrators who will assist their organization in providing easy access to Compass data for use in 3rd party software products.  The administrator will be responsible for setting up a Node-RED server and verifying the connection to Compass.
+This overview is intended for HCL Compass Administrators who will assist their organization in providing easy access to Compass data for use in 3rd party software products. The administrator will be responsible for setting up a Node-RED server and verifying the connection to Compass.
 
 ## Pre-requisites
-Compass 2.0.1 + running with the API server
-* In this example HCL Compass is running on localhost:8190
+Compass 2.0.1 + running with the API server.
+* In this example HCL Compass is running on localhost:8190.
 
 At least 1 valid DB/Schema
-One query used for creating a dashboard called Dashboard Data
+One query used for creating a dashboard called Dashboard Data.
 * In this example, the defect schema is used and the All Defects query is modified by adding Severity, Owner, and Priority fields.
 	
 ## Install Node-RED
 Follow the directions at: https://nodered.org/#get-started
-* In this example, Node-RED is installed on localhost:1880
+* In this example, Node-RED is installed on localhost:1880.
 	
 ## Configure Node-RED for use
 	- Install CSV to JSON node
@@ -55,9 +55,9 @@ Follow the directions at: https://nodered.org/#get-started
 		Select Done
 		Deploy the changes by selecting the Node-RED Deploy button.
 
-To Verify that everything is setup correctly, you should be able to open a browser: localhost:1881\compassData.  This will return data in the form of json from your query.
+To verify that everything is setup correctly, you should be able to open a browser: localhost:1881\compassData. This will return data in the form of json from your query.
 
-At this point, you are ready to begin testing with Microsoft Power BI or Tableau
+At this point, you are ready to begin testing with Microsoft Power BI or Tableau.
 
 ## Sub Folders
 	When configuring the Compass Query node, only the queries that exist either in the Personal Queries or Public Queries folders will be displayed in the drop down list.  If you need to access a query that is in a subfolder, you will need to use the queryPath parameter as in the following example:
