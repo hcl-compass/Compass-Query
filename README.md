@@ -13,8 +13,6 @@ See the example documentation [here](https://github.com/hcl-compass/Compass-Quer
 
 ## License
 
-/*
- 
  Copyright 2021 HCL Technologies Ltd.
 
  Licensed under the Apache License, Version 2.0 (the "License");
@@ -28,8 +26,8 @@ See the example documentation [here](https://github.com/hcl-compass/Compass-Quer
  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  See the License for the specific language governing permissions and
  limitations under the License.
- 
-*/
+
+
 
 
 
