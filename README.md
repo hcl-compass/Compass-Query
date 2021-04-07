@@ -9,7 +9,7 @@ This repository contains the files necessary to create a Node-RED flow that will
 ![Node Properties](./statics/properties.png)
 
 ## Examples
-See the example documentation [here](https://github.com/hcl-compass/Compass-Query/blob/main/example/readme.md)
+See the example documentation [here](https://github.com/hcl-compass/Compass-Query/blob/main/example/readme.md).
 
 ## License
 
