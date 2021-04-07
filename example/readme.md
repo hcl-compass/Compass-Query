@@ -94,8 +94,6 @@ At this point, you are ready to begin testing with Microsoft Power BI or Tableau
 	
 ## License
 
-/*
- 
  Copyright 2021 HCL Technologies Ltd.
 
  Licensed under the Apache License, Version 2.0 (the "License");
@@ -110,4 +108,3 @@ At this point, you are ready to begin testing with Microsoft Power BI or Tableau
  See the License for the specific language governing permissions and
  limitations under the License.
  
-*/
