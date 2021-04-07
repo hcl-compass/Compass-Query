@@ -1,5 +1,5 @@
 # Compass-Query
-The Compass Query node provides the necessary interface to create a connection to HCL Compass for the purpose of extracting data from defined queries.
+The Compass Query node from HCL provides the necessary interface to create a connection to HCL Compass for the purpose of extracting data from defined queries.
 This repository contains the files necessary to create a Node-RED flow that will extract data from HCL Compass for use in 3rd party software.
 
 ## Node Definition
